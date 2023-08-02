@@ -63,9 +63,9 @@ namespace School_Administration
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt: Issuer"],
-                    ValidAudience = Configuration["Jwt: Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt: SecretKey"])),
+                    ValidIssuer = Configuration.GetSection("Jwt")["Issuer"],
+                    ValidAudience = Configuration.GetSection("Jwt")["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Jwt")["SecretKey"])),
                     ClockSkew = TimeSpan.Zero
                 };
             });
