@@ -35,6 +35,7 @@ namespace School_Administration.Controllers
         }
 
         [HttpPut("RegisterUser")]
+        [Authorize(Policy = Policies.Admin)]
         public async Task<ActionResult> Register(UserDto dto)
         {
             var user = new User()
@@ -61,7 +62,7 @@ namespace School_Administration.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] User login)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto login)
         {
             IActionResult response = Unauthorized();
             User user = await AuthenticateUser(login);
@@ -76,7 +77,7 @@ namespace School_Administration.Controllers
             }
             return response;
         }
-       async Task<User> AuthenticateUser(User loginCredentials)
+       async Task<User> AuthenticateUser(LoginUserDto loginCredentials)
         {
             var user = (await _repository.UserRepository.GetAllEntity(w =>
             w.UserName == loginCredentials.UserName && w.Password == loginCredentials.Password, w =>
@@ -86,7 +87,7 @@ namespace School_Administration.Controllers
         }
         string GenerateJWTToken(User userInfo)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt: SecretKey"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt")["SecretKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
@@ -97,8 +98,8 @@ namespace School_Administration.Controllers
              };
 
             var token = new JwtSecurityToken(
-            issuer: _config["Jwt: Issuer"],
-            audience: _config["Jwt: Audience"],
+            issuer: _config.GetSection("Jwt")["Issuer"],
+            audience: _config.GetSection("Jwt")["Audience"],
             claims: claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: credentials
