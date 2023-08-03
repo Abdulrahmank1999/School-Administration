@@ -26,15 +26,18 @@ namespace School_Administration.Controllers
         public async Task<ActionResult> AddStudent(StudentDto dto)
         {
             var student = new Student();
-            var grade = new Grade();
 
             student.FirstName = dto.FirstName;
 
             student.LastName = dto.LastName;
 
-            grade = (await _repository.GradeRepository.GetAllEntity(w =>
-          w.GradeName == dto.GradeName || w.GradeId == dto.GradeId)).SingleOrDefault();
+            var grades = await _repository.GradeRepository.GetAllEntity(w =>
+          w.GradeName == dto.GradeName || w.GradeId == dto.GradeId);
 
+            if(grades.Count() > 1)
+                return Ok("you entered two different grades please enter either GradeName or GradeId");
+
+            var grade = grades.SingleOrDefault();
 
             if (grade == null)
                 return Ok("grade not exist");
@@ -49,11 +52,12 @@ namespace School_Administration.Controllers
         }
 
         
-        [HttpPost("GetStudentsWithSearch")]//you can search by either Gradename or GradeId
+        [HttpPost("GetStudentsWithSearch")]
         [Authorize(Policy = Policies.User)]
         public async Task<ActionResult> SearchStudent(StudentDto dto)
         {
-            var students = (await _repository.StudentRepository.StudentsWithSearch(dto)).Select(w=>new StudentResultDto
+            var students = (await _repository.StudentRepository.StudentsWithSearch(dto))
+                .Select(w=>new StudentResultDto
             {
                 FirstName=w.FirstName,
                 LastName=w.LastName,
@@ -70,8 +74,13 @@ namespace School_Administration.Controllers
         {
             var student = await _repository.StudentRepository.GetById(studentId);
 
-           var grade = (await _repository.GradeRepository.GetAllEntity(w =>
-         w.GradeName == dto.GradeName || w.GradeId == dto.GradeId)).SingleOrDefault();
+            var grades = await _repository.GradeRepository.GetAllEntity(w =>
+           w.GradeName == dto.GradeName || w.GradeId == dto.GradeId);
+
+            if (grades.Count() > 1)
+                return Ok("you entered two different grades please enter either GradeName or GradeId");
+
+            var grade = grades.SingleOrDefault();
 
             if (grade == null)
                 return Ok("grade not exist");
