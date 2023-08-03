@@ -22,7 +22,7 @@ namespace School_Administration.Controllers
         }
 
         [HttpPost("AddStudent")]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Policy = Policies.Admin)]//you can add Student by either gradename or gradeId
         public async Task<ActionResult> AddStudent(StudentDto dto)
         {
             var student = new Student();
@@ -48,7 +48,8 @@ namespace School_Administration.Controllers
             return Ok("Student Added Successfully");
         }
 
-        [HttpPost("GetStudentsWithSearch")]
+        
+        [HttpPost("GetStudentsWithSearch")]//you can search by either Gradename or GradeId
         [Authorize(Policy = Policies.User)]
         public async Task<ActionResult> SearchStudent(StudentDto dto)
         {
