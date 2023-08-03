@@ -74,6 +74,9 @@ namespace School_Administration.Controllers
         {
             var student = await _repository.StudentRepository.GetById(studentId);
 
+            if (student == null)
+                return Ok("Student ID not exist");
+
             var grades = await _repository.GradeRepository.GetAllEntity(w =>
            w.GradeName == dto.GradeName || w.GradeId == dto.GradeId);
 
