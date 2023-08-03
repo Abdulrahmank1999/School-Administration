@@ -53,7 +53,7 @@ namespace School_Administration.Controllers
 
         
         [HttpPost("GetStudentsWithSearch")]
-        [Authorize(Policy = Policies.User)]
+        [Authorize(Roles = Policies.User + "," + Policies.Admin)]
         public async Task<ActionResult> SearchStudent(StudentDto dto)
         {
             var students = (await _repository.StudentRepository.StudentsWithSearch(dto))
