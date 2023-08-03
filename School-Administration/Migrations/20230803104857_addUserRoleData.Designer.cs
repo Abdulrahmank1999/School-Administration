@@ -9,8 +9,8 @@ using School_Administration.Data;
 namespace School_Administration.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20230802200228_seeddatarole")]
-    partial class seeddatarole
+    [Migration("20230803104857_addUserRoleData")]
+    partial class addUserRoleData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -109,6 +109,16 @@ namespace School_Administration.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            FullName = "Abdulrahman Zaki Alkiswany",
+                            Password = "1234",
+                            RoleId = 1,
+                            UserName = "Abdulrahman"
+                        });
                 });
 
             modelBuilder.Entity("School_Administration.Models.Student", b =>

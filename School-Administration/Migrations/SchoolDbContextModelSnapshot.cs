@@ -107,6 +107,16 @@ namespace School_Administration.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            FullName = "Abdulrahman Zaki Alkiswany",
+                            Password = "1234",
+                            RoleId = 1,
+                            UserName = "Abdulrahman"
+                        });
                 });
 
             modelBuilder.Entity("School_Administration.Models.Student", b =>

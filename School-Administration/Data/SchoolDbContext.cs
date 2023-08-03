@@ -31,6 +31,18 @@ namespace School_Administration.Data
                                                   RoleName = "User"
                                               }
                                            );
+
+            modelBuilder.Entity<User>()
+                                    .HasData(
+                                              new User
+                                              {
+                                                 UserId=1,
+                                                 UserName="Abdulrahman",
+                                                 FullName="Abdulrahman Zaki Alkiswany",
+                                                 Password="1234",
+                                                 RoleId=1
+                                              }
+                                           );
         }
 
     }
