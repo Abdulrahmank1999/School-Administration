@@ -1,4 +1,7 @@
-﻿using School_Administration.Data.Logs;
+﻿using Microsoft.VisualBasic;
+using School_Administration.Data.Logs;
+using School_Administration.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace School_Administration.Data.Logging
@@ -7,12 +10,16 @@ namespace School_Administration.Data.Logging
     {
         public void AddToLogs(Log log)
         {
-            LoggerStore.Logs.Add(log);
+            var logs = new List<Log>
+            {
+                log
+            };
+
+            Guid LogNumber = new Guid();
+
+            logs.ExportToText("Logs/Log-" + LogNumber, '|');
         }
 
-        public List<Log> GetAllLogs()
-        {
-            return LoggerStore.Logs;
-        }
+       
     }
 }
