@@ -6,8 +6,14 @@ namespace School_Administration.Extensions
 {
     public static class ExportToTextFile
     {
+        public static int LogNumber = 0; //you can make it Guid or reset it after specific time but for simplicity I did that
+
         public static void ExportToText<T>(this IEnumerable<T> data, string FileName, char ColumnSeperator)
         {
+            LogNumber += 1;
+
+            FileName = FileName + "-" + LogNumber;
+
             using (var sw = File.CreateText(FileName))
             {
                 var plist = typeof(T).GetProperties().Where(p => p.CanRead && (p.PropertyType.IsValueType || p.PropertyType == typeof(string)) && p.GetIndexParameters().Length == 0).ToList();
