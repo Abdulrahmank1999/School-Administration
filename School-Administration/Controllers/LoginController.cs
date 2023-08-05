@@ -38,18 +38,25 @@ namespace School_Administration.Controllers
         [Authorize(Policy = Policies.Admin)]
         public async Task<ActionResult> Register(UserDto dto)
         {
-            var user = new User()
-            {
-                FullName = dto.FullName,
-                UserName = dto.UserName,
-                Password = dto.Password
-            };
+
+            var checkUserExist = (await _repository.UserRepository.GetAllEntity(w =>
+            w.UserName == dto.UserName)).SingleOrDefault();
+
+            if (checkUserExist != null)
+                return Ok("User Already exist");
 
             var role = (await _repository.RoleRepository.GetAllEntity(w =>
             w.RoleName == dto.RoleName)).SingleOrDefault();
 
             if (role == null)
                 return Ok("Role doesn't exist");
+
+            var user = new User()
+            {
+                FullName = dto.FullName,
+                UserName = dto.UserName,
+                Password = dto.Password
+            };
 
             user.RoleId = role.RoleId;
 
